@@ -355,12 +355,20 @@ test('works with http2', async t => {
 	await t.notThrowsAsync(client('https://httpbin.org/anything'));
 });
 
-test('http-cache-semantics typings', t => {
-	const instance = got.extend({
-		cacheOptions: {
-			shared: false
-		}
-	});
+test('cacheable-request typings', t => {
+	const dayInMillis = 24 * 3600 * 1000;
+	const cacheOptions = {
+		shared: false,
+		cacheHeuristic: 0.1,
+		immutableMinTimeToLive: dayInMillis,
+		ignoreCargoCult: false,
+		strictTtl: false,
+		maxTtl: 365 * dayInMillis,
+		automaticFailover: false,
+		forceRefresh: false
+	};
 
-	t.is(instance.defaults.options.cacheOptions.shared, false);
+	const instance = got.extend({ cacheOptions });
+
+	t.deepEqual(instance.defaults.options.cacheOptions, cacheOptions);
 });

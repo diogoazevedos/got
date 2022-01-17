@@ -307,6 +307,10 @@ export interface CacheOptions {
 	cacheHeuristic?: number;
 	immutableMinTimeToLive?: number;
 	ignoreCargoCult?: boolean;
+	strictTtl?: boolean;
+	maxTtl?: number;
+	automaticFailover?: boolean;
+	forceRefresh?:boolean;
 }
 
 interface PlainOptions extends URLOptions {
@@ -771,7 +775,7 @@ interface PlainOptions extends URLOptions {
 
 	createConnection?: (options: http.RequestOptions, oncreate: (error: Error, socket: Socket) => void) => Socket;
 
-	// From `http-cache-semantics`
+	// From `cacheable-request`
 	cacheOptions?: CacheOptions;
 
 	// TODO: remove when Got 12 gets released
@@ -2384,6 +2388,10 @@ export default class Request extends Duplex implements RequestEvents<Request> {
 		requestOptions.cacheHeuristic = options.cacheOptions?.cacheHeuristic;
 		requestOptions.immutableMinTimeToLive = options.cacheOptions?.immutableMinTimeToLive;
 		requestOptions.ignoreCargoCult = options.cacheOptions?.ignoreCargoCult;
+		requestOptions.strictTtl = options.cacheOptions?.strictTtl;
+		requestOptions.maxTtl = options.cacheOptions?.maxTtl;
+		requestOptions.automaticFailover = options.cacheOptions?.automaticFailover;
+		requestOptions.forceRefresh = options.cacheOptions?.forceRefresh;
 
 		// If `dnsLookupIpVersion` is not present do not override `family`
 		if (options.dnsLookupIpVersion !== undefined) {
